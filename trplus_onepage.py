@@ -4,6 +4,7 @@ import json
 from user_agent import generate_user_agent
 from urllib import request
 import os
+from trplus_inside import append_des
 
 if not os.path.exists('./trplus_footstools'):
     os.mkdir('./trplus_footstools')
@@ -32,10 +33,12 @@ for data in datas['products']:
         imagePath = './trplus_footstools/{}_{}.{}'.format(itemtitle, idx, url.split('.')[-1])
         imgpath.append(imagePath)
         # request.urlretrieve(url, imagePath)
+    theDict = append_des(itemUrl)
     itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "itemId":itemId, "itenUrl":itemUrl, "itemtitle":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
+    itemDict.update(theDict)
     results.append(itemDict)
     x+=1
 
 # print(results)
-with open('./trplus_onepage.json', 'w', encoding='utf-8') as f:
+with open('./trplus_onepage1.json', 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
