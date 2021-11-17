@@ -15,7 +15,7 @@ results = []
 
 res = requests.get(url, headers=headers)
 datas = json.loads(json.loads(res.text))
-print(datas['pages'])
+# print(datas['pages'])
 x=1
 for data in datas['products']:
     # print(data)
@@ -31,7 +31,7 @@ for data in datas['products']:
     for idx, url in enumerate(imgurl):
         imagePath = './trplus_footstools/{}_{}.{}'.format(itemtitle, idx, url.split('.')[-1])
         imgpath.append(imagePath)
-        request.urlretrieve(url, imagePath)
+        # request.urlretrieve(url, imagePath)
     itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "itemId":itemId, "itenUrl":itemUrl, "itemtitle":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
     results.append(itemDict)
     x+=1
