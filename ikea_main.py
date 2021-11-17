@@ -7,13 +7,13 @@ import os
 from time import sleep
 from random import randint
 from urllib import request
-from pymongo import MongoClient
-import pymongo
+# from pymongo import MongoClient
+# import pymongo
 
-# 連線mongodb
-connection = MongoClient(host='localhost', port=27017)
-db = connection.HomeSet
-collection = db['footstool_main']
+# # 連線mongodb
+# connection = MongoClient(host='localhost', port=27017)
+# db = connection.HomeSet
+# collection = db['footstool_main']
 # # 建立資料夾
 # if not os.path.exists('./footstools'):
 #     os.mkdir('./footstools')
@@ -35,7 +35,7 @@ for i in range(1,4):#頁數
 
     for article in soupArticle: #當頁每個商品
         articleUrl = 'https://www.ikea.com.tw'+article.a['href'] #每個商品網址
-        # print(x, articleUrl)
+        print(x, articleUrl)
 
         articleItem = article.h1.text.replace(" ",'') #商品標籤
         titleItem = article.select('a[class="itemName"]')[0].text.strip('\n').replace(" ",'') #商品品牌
@@ -60,19 +60,19 @@ for i in range(1,4):#頁數
         
         itemsInform['imgPath'] = imgelist
         resultJson.append(itemsInform)
-        try: #存入資料庫
-            result = collection.insert_one(itemsInform)        
-            print("已新增",itemsInform)
-        except Exception as err:
-            print(err)
+        # try: #存入資料庫
+        #     result = collection.insert_one(itemsInform)        
+        #     print("已新增",itemsInform)
+        # except Exception as err:
+        #     print(err)
         x+=1
         sleep(randint(2,5))
         
     sleep(randint(2,5))
     print("="*20)
 #存入JSON
-with open('./json_footstools_01.json', 'w', encoding='utf8') as jsonfile:
-    jsonfile.write(json.dumps(resultJson))
+with open('./json_footstools_02.json', 'w', encoding='utf-8') as jsonfile:
+    json.dump(resultJson, jsonfile, ensure_ascii=False)
 # # with open('./CN_footstools.json', 'w', encoding='utf8') as f:
 # #     json.dump(json.dumps(resultJson), f)
 # # print(resultJson)
