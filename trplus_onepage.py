@@ -34,11 +34,11 @@ for data in datas['products']:
         imgpath.append(imagePath)
         # request.urlretrieve(url, imagePath)
     theDict = append_des(itemUrl)
-    itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "itemId":itemId, "itenUrl":itemUrl, "itemtitle":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
+    itemDict.update({"name":itemtitle, "id":itemId, "price":price,"brand":brand, "imgurl":imgurl, "itenUrl":itemUrl, "origin_price":origin_price, "imagePath":imgpath})
     itemDict.update(theDict)
     results.append(itemDict)
     x+=1
 
 # print(results)
-with open('./trplus_onepage1.json', 'w', encoding='utf-8') as f:
+with open('./trplus_onepage2.json', 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)

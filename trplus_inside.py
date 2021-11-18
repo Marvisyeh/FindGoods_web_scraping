@@ -11,12 +11,14 @@ def append_des(url):
     datas = soup.select('div[class="col-12 clearfix"]')
     # print(datas)
     theDict = {}
+    category = [i.a.text for i in soup.select('li[class="breadcrumb-item"]')]
+    theDict['category'] = category
     for data in datas:
         describe = data.select('li')[0].text
         theDict["describe"] = describe
         # print(describe)
         # print("="*10)
-        itemInfo =[size.text.strip('\r\n ').replace('\r\n ','').replace(' ','') for size in data.select('div[class="info__aspect"]')]
+        itemInfo =[size.text.strip('\r\n ').replace('\n ','').replace(' ','') for size in data.select('div[class="info__aspect"]')]
         theDict["itemInfo"] = itemInfo
         # print(sizes)
         # print("="*10)
