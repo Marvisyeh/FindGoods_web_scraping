@@ -40,6 +40,6 @@ for idx,i in enumerate(final):
     results.append(itemDic)
     sleep(randint(2,5))
 
-with open('./{}'.format(thename.replace('/','')), 'w', encoding='utf-8') as f:
+with open('./{}.json'.format(thename.replace('/','')), 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 print(len(results))
