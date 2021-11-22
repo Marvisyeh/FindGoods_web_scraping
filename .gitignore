@@ -1,0 +1,10 @@
+.idea/
+.ipynb_checkpoints/
+diagnostic.data/
+homeMongo/
+journal/
+__pycache__/
+*.ipynb
+*.json
+img/
+01_mongodb
