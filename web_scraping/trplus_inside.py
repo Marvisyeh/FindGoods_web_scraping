@@ -1,7 +1,9 @@
+import requests
+from bs4 import BeautifulSoup
+from user_agent import generate_user_agent
+import re
+
 def append_des(url):
-    import requests
-    from bs4 import BeautifulSoup
-    from user_agent import generate_user_agent
 
     headers = {"User-Agent": generate_user_agent()}
 
@@ -18,8 +20,9 @@ def append_des(url):
         theDict["describe"] = describe
         # print(describe)
         # print("="*10)
-        itemInfo =[size.text.strip('\r\n ').replace('\n ','').replace(' ','') for size in data.select('div[class="info__aspect"]')]
-        theDict["itemInfo"] = itemInfo
+        itemInfo =[size.text for size in data.select('div[class="info__aspect"]')]
+        itemInfo =map(lambda x:re.sub(' +','',x) ,map(lambda x: re.sub('\r\n','',x), itemInfo))
+        theDict["itemInfo"] = [item for item in itemInfo]
         # print(sizes)
         # print("="*10)
     return theDict

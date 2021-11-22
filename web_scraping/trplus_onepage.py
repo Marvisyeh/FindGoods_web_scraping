@@ -5,9 +5,10 @@ from user_agent import generate_user_agent
 from urllib import request
 import os
 from trplus_inside import append_des
+from inputdata_mongo import input_data_Tomongo
 
-if not os.path.exists('./trplus_footstools'):
-    os.mkdir('./trplus_footstools')
+# if not os.path.exists('./trplus_footstools'):
+#     os.mkdir('./trplus_footstools')
 
 headers = {"User-Agent": generate_user_agent()}
 # url = 'https://www.trplus.com.tw/TR_Furniture/c/EC_10090063'
@@ -34,11 +35,13 @@ for data in datas['products']:
         imgpath.append(imagePath)
         # request.urlretrieve(url, imagePath)
     theDict = append_des(itemUrl)
-    itemDict.update({"name":itemtitle, "id":itemId, "price":price,"brand":brand, "imgurl":imgurl, "itenUrl":itemUrl, "origin_price":origin_price, "imagePath":imgpath})
+    itemDict.update({"name":itemtitle, "id":itemId, "price":price,"brand":brand, "imgurl":imgurl, "url":itemUrl, "origin_price":origin_price, "imagePath":imgpath})
     itemDict.update(theDict)
     results.append(itemDict)
     x+=1
 
+input_data_Tomongo("HomeSet","trplus", results)
+
 # print(results)
-with open('./trplus_onepage2.json', 'w', encoding='utf-8') as f:
-    json.dump(results, f, ensure_ascii=False, indent=2)
+# with open('./trplus_onepage2.json', 'w', encoding='utf-8') as f:
+#     json.dump(results, f, ensure_ascii=False, indent=2)

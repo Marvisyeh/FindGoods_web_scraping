@@ -11,12 +11,12 @@ def mongo_data(db,collection):
 
 
 if __name__ == '__main__':
-    result = mongo_data('HomeSet','footstools')
-    for results in result:
+    result = mongo_data('HomeSet','footstool_main')
+    # for results in result:
         # print(results['name'],len(results['name']))
         # print(results['id'])
         # print(results['price'])
-        print(results['brand'],len(results['brand']))
+        # print(results['brand'],len(results['brand']))
         # print(results['extraFacts'].split(',')[1],len(results['extraFacts'].split(',')[1]))
         # print(results['url'])
     #     name = results['name']
