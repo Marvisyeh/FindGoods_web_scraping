@@ -1,6 +1,8 @@
 import pymysql
 
-def check_url(db, columns):
+
+
+def check_url(db='homeset', columns='items'):
     connInfo = {
         'host': 'localhost',
         'port': 3306,
@@ -12,8 +14,8 @@ def check_url(db, columns):
     conn = pymysql.connect(**connInfo)
     cursor = conn.cursor()
     try:
-        cursor.execute("use {}".format(db))
-        sql = "select url from {}".format(columns)
+        # cursor.execute("use {}".format(db))
+        sql = "select url from {}.{}".format(db,columns)
         cursor.execute(sql)
         data = cursor.fetchall()
 
@@ -31,11 +33,11 @@ def check_url(db, columns):
     # return theId, datas
 
 if __name__ == '__main__':
-    db = 'HomeSet'
-    columns = 'footstool_main'
+    db = 'homeset'
+    columns = 'items'
     results = check_url(db, columns)
     # num, results = check_col(columns)
     # print(num)
-    print(results)
+    
 
 

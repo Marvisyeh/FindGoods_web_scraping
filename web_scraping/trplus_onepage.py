@@ -5,7 +5,7 @@ from user_agent import generate_user_agent
 from urllib import request
 import os
 from trplus_inside import append_des
-from inputdata_mongo import input_data_Tomongo
+from pymongo_connect import input_data_Tomongo
 
 # if not os.path.exists('./trplus_footstools'):
 #     os.mkdir('./trplus_footstools')

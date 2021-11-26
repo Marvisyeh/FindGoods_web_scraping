@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mainpage</title>
+</head>
+<body>
+    <h1 style="padding: 15px; line-height: 1.5; text-align: center; border: 3px solid #000;">
+        The Better Choice
+    </h1>
+
+    <form action="/" method="POST">
+        <select name="shopname">
+            <option name="shopname" value="All Shop">請選擇商家</option>
+            <option name="shopname" value="ikea">IKEA</option>
+            <option name="shopname" value="pinkoi">PINKOI</option>
+            <option name="shopname" value="trplus">TRPLUS</option>
+        </select>
+        <button>submit</button>
+        <!-- <button>search</button> -->
+    </form>
+
+    <!-- <div>
+        {%if requestMethod == 'POST' %}
+        <h2>your prefer shop is {{ shop }}</h2>
+        {% endif %}
+    </div> -->
+
+    {% if requestMethod == 'POST' %}
+    <div>
+        <div>
+            <table border="1">
+                <thead>
+                    <tr>
+                        {% for title in titles %}
+                        <td>{{title}}</td>
+                        {% endfor %}
+                    </tr>
+                    
+                </thead>
+                {% for data in datas %}
+                    <tr>
+                        <td><img src="{{data[3]}}" width="180" height="180"></td>
+                        <td><a href="{{data[2]}}">{{data[0]}}</a></td>
+                        <td width="80">$ {{data[1]}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+
+</body>
+</html>

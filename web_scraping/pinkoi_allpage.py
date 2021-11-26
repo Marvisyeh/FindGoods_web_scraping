@@ -5,10 +5,12 @@ from user_agent import generate_user_agent
 import json
 from time import sleep
 from pinkoi_insideItem import plus_des
+from pymongo_connect import input_data_Tomongo
 
 final = []
 url = 'https://www.pinkoi.com/browse?category=5&subcategory=543'
-for i in range(1,2):
+for i in range(1,3):
+    print(url)
     headers = {'User-Agent' : generate_user_agent()}
     res = requests.get(url, headers = headers)
     soup = BeautifulSoup(res.text, 'html.parser')
@@ -40,6 +42,7 @@ for idx,i in enumerate(final):
     results.append(itemDic)
     sleep(randint(2,5))
 
-with open('./{}.json'.format(thename.replace('/','')), 'w', encoding='utf-8') as f:
-    json.dump(results, f, ensure_ascii=False, indent=2)
+input_data_Tomongo('furniture','pinkoi',results)
+# with open('./{}.json'.format(thename.replace('/','')), 'w', encoding='utf-8') as f:
+#     json.dump(results, f, ensure_ascii=False, indent=2)
 print(len(results))

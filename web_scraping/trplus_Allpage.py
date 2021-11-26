@@ -6,9 +6,10 @@ from urllib import request
 import os
 from random import randint
 from time import sleep
+from pymongo_connect import input_data_Tomongo as input
 
-if not os.path.exists('./trplus_footstools'):
-    os.mkdir('./trplus_footstools')
+# if not os.path.exists('./trplus_footstools'):
+#     os.mkdir('./trplus_footstools')
 
 headers = {"User-Agent": generate_user_agent()}
 # url = 'https://www.trplus.com.tw/TR_Furniture/c/EC_10090063'
@@ -39,7 +40,7 @@ for i in range(0,allpage):
             imagePath = './trplus_footstools/{}_{}.{}'.format(itemtitle, idx, url.split('.')[-1])
             imgpath.append(imagePath)
             # request.urlretrieve(url, imagePath)
-        itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "itemId":itemId, "itenUrl":itemUrl, "itemtitle":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
+        itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "id":itemId, "url":itemUrl, "name":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
         results.append(itemDict)
         print(x)
         x+=1
@@ -47,6 +48,7 @@ for i in range(0,allpage):
     
     sleep(randint(1,5))
 
+input('furniture', 'trplus', results)
     # print(results)
-    with open('./trplus_allpage.json', 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+    # with open('./trplus_allpage.json', 'w', encoding='utf-8') as f:
+    #     json.dump(results, f, ensure_ascii=False, indent=2)
