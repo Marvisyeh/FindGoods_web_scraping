@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  scribe:
+    image: python
+    build: 
+      context:./
+    restart: always
+    volumes:
+      - ./ikea
+    links: mongodb
+    
+
+  mongodb: #服務名稱可以更改
+    image: mongo #必須是mongo
+    container_name: mongodb #自訂名稱
+    restart: always
+    port:
+      - 27017:27017
+    volumes: #文件夾
+      - ./database:/data/db
+      environment: #變量
+      - MONGO_INITDB_ROOT_USERNAME=admin #root
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+
+networks:
+  default:
+    name: mongodb_network
