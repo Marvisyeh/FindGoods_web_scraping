@@ -32,7 +32,7 @@ def inside(itemUrl,itemName):
     content['size']=itemInfo
     # print(itemdes_key,itemdes_values,itemInfo)
     imgs = ['https://www.ikea.com.tw'+i['href'] for i in soupItem.select('a[class="slideImg"]')]
-    content['imgs']=imgs
+    content['imgurl']=imgs
     shop = imgs[0].split('.')[1]
     if not os.path.exists('./{}'.format(shop)):
         os.mkdir('./{}'.format(shop))

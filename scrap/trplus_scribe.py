@@ -1,8 +1,9 @@
 import requests
+from urllib import request
 from bs4 import BeautifulSoup
 from user_agent import generate_user_agent
 from tool import cleanup_content as clean
-import json
+import json,os
 from time import sleep
 from random import randint
 from pymongo_connect import input_data_Tomongo,url_set
@@ -56,6 +57,7 @@ def trplus_scribe(itemsid,collection):
         res = requests.get(url, headers=headers)
         datas = json.loads(json.loads(res.text))
         idx,checkduplicate = url_set('trplus',collection)
+        
         if idx > 100:
             break
         else:
@@ -63,7 +65,7 @@ def trplus_scribe(itemsid,collection):
                 # print(data)
                 itemUrl = 'https://www.trplus.com.tw'+data['GDURL']
                 idx,checkduplicate = url_set('trplus',collection)
-
+                checkduplicate=[]
                 if itemUrl in checkduplicate:
                     continue
                 else:
@@ -75,16 +77,22 @@ def trplus_scribe(itemsid,collection):
                     origin_price = data['GDCPRC']
                     imgurl = data['GDImages']
                     imgpath = []
-                    # for idx, url in enumerate(imgurl):
-                        # imagePath = './trplus_footstools/{}_{}.{}'.format(itemtitle, idx, url.split('.')[-1])
-                        # imgpath.append(imagePath)
-                        # request.urlretrieve(url, imagePath)
+                    filename = url.split('.')[1]
+                    if not os.path.exists('./{}'.format(filename)):
+                        os.mkdir('./{}'.format(filename))
+                    if not os.path.exists('./{}/{}'.format(filename,collection)):
+                        os.mkdir('./{}/{}'.format(filename,collection))
+                    for idx, url in enumerate(imgurl):
+                        imagePath = './{}/{}/{}_{}_{}.{}'.format(filename,collection,brand,itemId, idx, url.split('.')[-1])
+                        imgpath.append(imagePath)
+                        request.urlretrieve(url, imagePath)
                     theDict = insidetrp(itemUrl)
-                    itemDict.update({"brand":brand, "price":price, "img":imgurl, "id":itemId, "url":itemUrl, "name":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
+                    itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "id":itemId, "url":itemUrl, "name":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
                     itemDict.update(theDict)
+                    print(itemDict)
                     input_data_Tomongo('trplus',collection,itemDict)
                     results.append(itemDict)
-                    print(itemtitle,itemUrl,imgurl)
+                    # print(itemtitle,itemUrl,imgurl)
                     # x+=1
                 sleep(randint(2,5))
 
@@ -92,8 +100,9 @@ def trplus_scribe(itemsid,collection):
 
 
 if __name__ == "__main__":
-    # {'footstool':'EC_10090063','frame':'EC_10001288','vasesbowl':'EC_10001291','mugs':'EC_30089977','lamps':'EC_10092406','desk':'EC_10090054',
-    items = {'Cushion':'EC_10000025'}
+
+    
+    items = {'footstool':'EC_10090063','frame':'EC_10001288','vasesbowl':'EC_10001291','mugs':'EC_30089977','lamps':'EC_10092406','desk':'EC_10090054','Cushion':'EC_10000025'}
     for i,k in items.items():
         # print(i,k)
         trplus_scribe(k,i)
