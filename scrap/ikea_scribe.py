@@ -4,13 +4,14 @@ from user_agent import generate_user_agent
 from bs4 import BeautifulSoup
 from time import sleep
 from random import randint
-import json
+import json,os,pprint
 from tool import cleanup_content as clean
 from pymongo_connect import input_data_Tomongo as in_mongo
 from pymongo_connect import url_set
 
 ## product_insidePage
 def inside(itemUrl,itemName):
+    
     headers = {"User-Agent":generate_user_agent()}
     resItem = requests.get(itemUrl, headers=headers)
     soupItem = BeautifulSoup(resItem.text,'html.parser')
@@ -32,11 +33,19 @@ def inside(itemUrl,itemName):
     # print(itemdes_key,itemdes_values,itemInfo)
     imgs = ['https://www.ikea.com.tw'+i['href'] for i in soupItem.select('a[class="slideImg"]')]
     content['imgs']=imgs
+    shop = imgs[0].split('.')[1]
+    if not os.path.exists('./{}'.format(shop)):
+        os.mkdir('./{}'.format(shop))
+    if not os.path.exists('./{}/{}'.format(shop,itemName)):
+        os.mkdir('./{}/{}'.format(shop,itemName))
+    img_path_list=[]
     for idx, img in enumerate(imgs):
         print('\t', img)
         # downloadImg
-        img_path = './{}/{}_{}.{}'.format(itemName,itemName, idx, img.split(".")[-1])
+        img_path = './{}/{}/{}_{}_{}.{}'.format(shop,itemName,shop[0:2],itemId, idx, img.split(".")[-1])
+        img_path_list.append(img_path)
         request.urlretrieve(img, img_path)
+    content['image_path']=img_path_list
     # print(content)
 
     return itemId,content
@@ -127,7 +136,7 @@ def ikea_pro(collection,category,itemName):
     # results_list = []
     idset=set()
     while True:
-        # print(url)
+        print(url)
 
         res = requests.get(url, headers=headers)
         soup = BeautifulSoup(res.text,'html.parser')
@@ -147,7 +156,7 @@ def ikea_pro(collection,category,itemName):
             item['CNname'] = itemsName
             item['url'] = itemUrl
             try:
-                itemId,content = inside(itemUrl)
+                itemId,content = inside(itemUrl,itemName)
             except Exception as e:
                 print(e)
                 continue
@@ -160,14 +169,15 @@ def ikea_pro(collection,category,itemName):
                 itemreviews = comments(itemId)
                 content.update(itemreviews)
                 item.update(content)
-                ## results_list.append(item)
+                # results_list.append(item)
                 idx,exists_url = url_set('ikea2',collection)
                 if itemUrl in exists_url:
                     print('item already in database')
                 else:
                     item['_id']=idx
                     in_mongo('ikea2',collection,item)
-                    # print(id)
+                    print(id)
+            print(item)
             id+=1
             sleep(randint(1,4))
 
@@ -187,18 +197,18 @@ if __name__ == '__main__':
 
     #02_insideTest
     # url = 'https://www.ikea.com.tw/zh/products/armchairs-footstool-and-sofa-tables/footstools/bosnas-art-20266683'
-    # headers = {"User-Agent":generate_user_agent()}
-    # itemId,content = inside(url)
+    # itemId,content = inside(url,url.split('/')[-2])
+    
     
     # #03 commentsTest
-    # # itemId = '20266683'
+    # itemId = '20266683'
     # result = comments(itemId)
 
 #     content.update(result)
 #     print(content)
 # 
-    # items = {'footstool':['sofas','footstools'],'frame':['home-decoration','frames-and-wall-decoration'],'vasesbowl':['home-decoration','vases-bowls-and-accessories'],'mugs':['tableware','coffee-and-tea-accessories'],'lamps':['luminaires','table-lamps'],'desk':['work-desks','home-desks'],'Cushion':['cushions-throws-and-chairpads','cushions']}
-    items = {'Cushion':['cushions-throws-and-chairpads','cushions']}
+    items = {'footstool':['sofas','footstools'],'frame':['home-decoration','frames-and-wall-decoration'],'vasesbowl':['home-decoration','vases-bowls-and-accessories'],'mugs':['tableware','coffee-and-tea-accessories'],'lamps':['luminaires','table-lamps'],'desk':['work-desks','home-desks'],'Cushion':['cushions-throws-and-chairpads','cushions']}
+    # items = {'Cushion':['cushions-throws-and-chairpads','cushions']}
     
     for collection,j in items.items():
         ikea_pro(collection,j[0],j[1])
