@@ -4,8 +4,7 @@ services:
 
   scribe:
     image: python
-    build: 
-      context:./
+    build: .
     restart: always
     volumes:
       - ./ikea
@@ -20,10 +19,4 @@ services:
       - 27017:27017
     volumes: #文件夾
       - ./database:/data/db
-      environment: #變量
-      - MONGO_INITDB_ROOT_USERNAME=admin #root
-      - MONGO_INITDB_ROOT_PASSWORD=admin
 
-networks:
-  default:
-    name: mongodb_network

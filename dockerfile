@@ -2,17 +2,13 @@ FROM python:3.7
 
 MAINTAINER marvisyeh@gmail.com
 
-COPY ./ikea /usr/share/webscribe
+ADD ./ikea /webscap
 
-VOLUME ["/usr/share/webscribe"]
+WORKDIR /webscrap
 
-ENV 
+COPY requirements.txt ./
 
-WORKDIR
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-
-ADD ./ikea/ikea_scribe.py
-ADD ./ikea/pymongo_connect.py
-ADD ./ikea/tool.py
-
-RUN 
+CMD ["python3","ikea_scribe.py"]
