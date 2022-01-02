@@ -81,7 +81,7 @@ def tomysql(db, columns, schema):
         URL = result['url']
         # IMG_PATH = result['imgs'][0]
         try:
-            IMG_PATH = result['imgs'][0]
+            IMG_PATH = result['imgurl'][0]
         except:
             print(URL,result['imgs'])
         PFNO = site_judge(URL)
