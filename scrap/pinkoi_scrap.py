@@ -1,8 +1,7 @@
 from random import randint
-import requests
+import requests,json,re
 from bs4 import BeautifulSoup
 from user_agent import generate_user_agent
-import json,re
 from time import sleep
 from pymongo_connect import input_data_Tomongo
 from tool import cleanup_content as clean
@@ -53,27 +52,33 @@ def main_scrap():
         for i in soup.select('script[type="application/ld+json"]'):
             # print(i.contents)
             for j in i.contents:
-                # print(j)
-                # print(j['name'])
+                # j = (json.loads(j))
+                # print(j['productID'])
+                # print(j['productID'],j['name'],j['image'],j['brand']['name'],j['offers']['price'],j['offers']['url'],j['offers']['seller']['name'])
                 inside_list.append(json.loads(j))
         itemList=inside_list[1:]
+        itemList = [ {'itemId':j['productID'],'name':j['name'],'imageUrl':j['image'],'brand':j['brand']['name'],'price':j['offers']['price'],'itemUrl':j['offers']['url'],\
+                    'seller':j['offers']['seller']['name']} for j in itemList]
+        # for k in itemList:
+        #     print(k['productID'])
+        # print(itemList)
         final.extend(itemList)
             
         path=inside_list[0]
-        print(path)
+        # print(path)
         #取得下一頁url
         url = soup.select('link[rel="next"]')[0]['href']
         sleep(randint(1,4))
     # print(final)
 
 
-    # name_1 = [n['name'] for n in [p['item'] for p in path['itemListElement']]]
-    # thename = '_'.join(name_1)
+    name_1 = [n['name'] for n in [p['item'] for p in path['itemListElement']]]
+    thename = '_'.join(name_1)
 
     results = []
     for idx,i in enumerate(final):
     #     print(idx,i)
-        url = i['offers']['url']
+        url = i['itemUrl']
         adddes = plus_des(url)
         itemDic={}
         itemDic['_id']=idx+1
@@ -82,16 +87,16 @@ def main_scrap():
         print(itemDic)
         results.append(itemDic)
         sleep(randint(2,5))
-
     print(results)
+
     # input_data_Tomongo('furniture','pinkoi',results)
 
-    # with open('./{}.json'.format(thename.replace('/','')), 'w', encoding='utf-8') as f:
-    #     json.dump(results, f, ensure_ascii=False, indent=2)
+    # # with open('./{}.json'.format(thename.replace('/','')), 'w', encoding='utf-8') as f:
+    # #     json.dump(results, f, ensure_ascii=False, indent=2)
     return results
 
 if __name__ == "__main__":
-    url = 'https://www.pinkoi.com/product/Q7pE2Zfm?category=5&ref_itemlist=8QNVk85K'
-    print(plus_des(url))
+    # url = 'https://www.pinkoi.com/product/Q7pE2Zfm?category=5&ref_itemlist=8QNVk85K'
+    # print(plus_des(url))
 
-    # main_scrap()
+    main_scrap()
