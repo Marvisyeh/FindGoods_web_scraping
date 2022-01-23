@@ -85,7 +85,7 @@ def trplus_scribe(itemsid,collection):
                     for idx, url in enumerate(imgurl):
                         imagePath = './{}/{}/{}_{}_{}.{}'.format(filename,collection,brand,itemId, idx, url.split('.')[-1])
                         imgpath.append(imagePath)
-                        request.urlretrieve(url, imagePath)
+                        # request.urlretrieve(url, imagePath)
                     theDict = insidetrp(itemUrl)
                     itemDict.update({"brand":brand, "price":price, "imgurl":imgurl, "id":itemId, "url":itemUrl, "name":itemtitle, "origin_price":origin_price, "imagePath":imgpath})
                     itemDict.update(theDict)

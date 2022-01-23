@@ -5,8 +5,8 @@ connection = MongoClient(host='localhost', port=27017)
 connInfo = {
         'host': 'localhost',
         'port': 3306,
-        'user': '',
-        'passwd': '',
+        'user': 'TFI101',
+        'passwd': 'tfi101',
         'charset': 'utf8mb4'
     }
 
@@ -62,6 +62,7 @@ def tomysql(db, columns, schema):
         `PRICE` DECIMAL(7,2),
         `BRAND` VARCHAR(50) NULL,
         `URL` VARCHAR(2083) NOT NULL,
+        `IMG_URL` TEXT,
         `IMG_PATH` VARCHAR(128) NOT NULL,
         `PFNO` INT NOT NULL,
         `TAGS` VARCHAR(100) NULL,
@@ -78,20 +79,22 @@ def tomysql(db, columns, schema):
         PRICE = result['price']
         BRAND = result['brand']
         CATE = ' '.join(re.sub('\W+',' ',result['cn_title']).split())
+        # CATE = ' '.join(result['category'])
         URL = result['url']
-        # IMG_PATH = result['imgs'][0]
-        try:
-            IMG_PATH = result['imgurl'][0]
-        except:
-            print(URL,result['imgs'])
+        IMG_URL = result['imgurl'][0]
+        IMG_PATH = r'/img/'+result['image_path'][0].split('./')[1]
+        # try:
+            # IMG_PATH = result['imgurl'][0]
+        # except:
+            # print(URL,result['imgs'])
         PFNO = site_judge(URL)
         # tags = re.sub('\W+',',',re.sub('[a-zA-z]+|\d+..','',result['cn_title']))
         # tags = ''
         # print(tags[:])
-        datas = (ITEMNAME, ITEMID, PRICE, BRAND, URL, IMG_PATH,columns, CATE, PFNO)
+        datas = (ITEMNAME, ITEMID, PRICE, BRAND, URL, IMG_URL, IMG_PATH, columns, CATE, PFNO)
         # print(datas)
-        insert_commit = """INSERT INTO item (ITEMNAME, ITEMID, PRICE, BRAND, URL, IMG_PATH, CATE, TAGS, PFNO)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        insert_commit = """INSERT INTO item (ITEMNAME, ITEMID, PRICE, BRAND, URL, IMG_URL, IMG_PATH, CATE, TAGS, PFNO)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
         if URL in urled:
             print("url already exists")
             continue

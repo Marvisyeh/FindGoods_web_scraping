@@ -1,7 +1,5 @@
 FROM python:3.7
 
-MAINTAINER marvisyeh@gmail.com
-
 ADD ./ikea /webscap
 
 WORKDIR /webscrap

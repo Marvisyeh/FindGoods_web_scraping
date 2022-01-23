@@ -10,7 +10,7 @@ from pymongo_connect import input_data_Tomongo as in_mongo
 from pymongo_connect import url_set
 
 ## product_insidePage
-def inside(itemUrl,itemName):
+def inside(itemUrl,collection):
     
     headers = {"User-Agent":generate_user_agent()}
     resItem = requests.get(itemUrl, headers=headers)
@@ -36,15 +36,15 @@ def inside(itemUrl,itemName):
     shop = imgs[0].split('.')[1]
     if not os.path.exists('./{}'.format(shop)):
         os.mkdir('./{}'.format(shop))
-    if not os.path.exists('./{}/{}'.format(shop,itemName)):
-        os.mkdir('./{}/{}'.format(shop,itemName))
+    if not os.path.exists('./{}/{}'.format(shop,collection)):
+        os.mkdir('./{}/{}'.format(shop,collection))
     img_path_list=[]
     for idx, img in enumerate(imgs):
         print('\t', img)
         # downloadImg
-        img_path = './{}/{}/{}_{}_{}.{}'.format(shop,itemName,shop[0:2],itemId, idx, img.split(".")[-1])
+        img_path = './{}/{}/{}_{}_{}.{}'.format(shop,collection,shop[0:2],itemId, idx, img.split(".")[-1])
         img_path_list.append(img_path)
-        request.urlretrieve(img, img_path)
+        # request.urlretrieve(img, img_path)
     content['image_path']=img_path_list
     # print(content)
 
